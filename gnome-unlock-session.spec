@@ -24,7 +24,7 @@ Fast gnome unlock session by pressing SUPER+U for quite safe home environments
 %build
 %install
 install -m 0755 -d $RPM_BUILD_ROOT/usr/bin
-install -m 0644 gnome-unlock-session ${RPM_BUILD_ROOT}/usr/bin/gnome-unlock-session
+install -m 0755 gnome-unlock-session ${RPM_BUILD_ROOT}/usr/bin/gnome-unlock-session
 
 install -m 0755 -d $RPM_BUILD_ROOT/usr/lib/systemd/system/
 install -m 0644 gnome-unlock-session.service ${RPM_BUILD_ROOT}/usr/lib/systemd/system/gnome-unlock-session.service
