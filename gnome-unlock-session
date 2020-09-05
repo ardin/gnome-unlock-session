@@ -1,7 +1,19 @@
-import evdev, os
+import evdev, os, sys
 
-device = evdev.InputDevice('/dev/input/event3')
-print(device)
+devices = [evdev.InputDevice(path) for path in evdev.list_devices()]
+for dev in devices:
+    if 'keyboard' in dev.name.lower() and 'input0' in dev.phys:
+        device = evdev.InputDevice(dev.path)
+
+try:
+    device
+except NameError:
+    print("ERROR: keyboard not detected!")
+    exit(1)
+else:
+    print("Found:", device)
+
+# exit if keyboard not detected
 
 for event in device.read_loop():
     if event.type == evdev.ecodes.EV_KEY:
