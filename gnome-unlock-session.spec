@@ -38,9 +38,7 @@ rm -rf ${RPM_BUILD_ROOT}
 /usr/bin/systemctl start gnome-unlock-session.service
 
 %files
-%dir /usr/bin
 /usr/bin/gnome-unlock-session
-%dir /usr/lib/systemd/system/
 /usr/lib/systemd/system/gnome-unlock-session.service
 
 %changelog
