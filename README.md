@@ -1,5 +1,7 @@
 # GNOME-unlock-session
 
+[![Copr build status](https://copr.fedorainfracloud.org/coprs/ardin/gnome-unlock-session/package/gnome-unlock-session/status_image/last_build.png)](https://copr.fedorainfracloud.org/coprs/ardin/gnome-unlock-session/package/gnome-unlock-session/)
+
 ## General notes
 
 Are you tired continuously entering password when your home workstation is locked?
