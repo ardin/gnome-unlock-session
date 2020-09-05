@@ -1,0 +1,12 @@
+import evdev, os
+
+device = evdev.InputDevice('/dev/input/event3')
+print(device)
+
+for event in device.read_loop():
+    if event.type == evdev.ecodes.EV_KEY:
+        k = device.active_keys() 
+        if len(k) == 2:
+            if k[0] == 22 and k[1] == 125: 
+                os.system("sudo loginctl unlock-sessions")
+

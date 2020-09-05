@@ -1,0 +1,10 @@
+[Unit]
+Description=Unlock Gnome Session
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /usr/bin/gnome-unlock-session
+
+[Install]
+WantedBy=multi-user.target
