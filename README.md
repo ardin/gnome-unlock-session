@@ -8,7 +8,7 @@ Are you tired continuously entering password when your home workstation is locke
 
 I am. 
 
-Thus, this program unlock your workstation by pressing **SUPER+U** without additional credentials.
+Thus, this program will unlock your locked workstation by pressing **SUPER+U** without additional credentials.
 
 I don't recommend this in sensitive environments or where someone can apply "Mortal Combat" combination.
 
