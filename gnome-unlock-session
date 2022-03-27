@@ -2,13 +2,16 @@ import evdev, os, sys
 
 devices = [evdev.InputDevice(path) for path in evdev.list_devices()]
 for dev in devices:
-    if 'keyboard' in dev.name.lower() and 'input0' in dev.phys:
+    if ('keyboard' in dev.name.lower() and 'input0' in dev.phys) or 'Dell Dell Universal Receiver' in dev.name:
         device = evdev.InputDevice(dev.path)
 
 try:
     device
 except NameError:
     print("ERROR: keyboard not detected!")
+    devices = [evdev.InputDevice(path) for path in evdev.list_devices()]
+    for device in devices:
+        print("*", device.name)
     exit(1)
 else:
     print("Found:", device)
