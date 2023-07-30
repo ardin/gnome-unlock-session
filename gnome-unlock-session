@@ -1,27 +1,82 @@
-import evdev, os, sys
+#!/usr/bin/env python3
 
-devices = [evdev.InputDevice(path) for path in evdev.list_devices()]
-for dev in devices:
-    if ('keyboard' in dev.name.lower() and 'input0' in dev.phys) or 'Dell Dell Universal Receiver' in dev.name:
-        device = evdev.InputDevice(dev.path)
+import sys, os
+import libevdev
+                    
+last_code = None
+first_code = None
+second_code = None
 
-try:
-    device
-except NameError:
-    print("ERROR: keyboard not detected!")
-    devices = [evdev.InputDevice(path) for path in evdev.list_devices()]
-    for device in devices:
-        print("*", device.name)
-    exit(1)
-else:
-    print("Found:", device)
 
-# exit if keyboard not detected
+def print_capabilities(l):
+    v = l.driver_version
+    print("Input driver version is {}.{}.{}".format(v >> 16, (v >> 8) & 0xff, v & 0xff))
+    id = l.id
+    print("Input device ID: bus {:#x} vendor {:#x} product {:#x} version {:#x}".format(
+        id["bustype"],
+        id["vendor"],
+        id["product"],
+        id["version"],
+    ))
+    print("Input device name: {}".format(l.name))
 
-for event in device.read_loop():
-    if event.type == evdev.ecodes.EV_KEY:
-        k = device.active_keys() 
-        if len(k) == 2:
-            if k[0] == 22 and k[1] == 125: 
-                os.system("sudo loginctl unlock-sessions")
+
+def print_event(e):
+    global last_code, first_code, second_code
+    if e.code.value == 22 and second_code == 125:
+        print("FOUND")
+        os.system("sudo loginctl unlock-sessions")
+
+    second_code = first_code
+    first_code = last_code
+    last_code = e.code.value
+
+
+def find_kbd():
+    folder = "/dev/input/by-id/"
+    for dirpath, subdirs, files in os.walk(folder): 
+        for f in files:
+            found = False
+            if "kbd" in f:
+                found = True
+                print("Found keyboard: ", os.path.join(dirpath,f))
+                return(os.path.join(dirpath,f))
+        
+        if not found:
+            print("no keyboard found")
+            exit(1)
+
+
+def main():
+    path = find_kbd()
+    try:
+        with open(path, "rb") as fd:
+            dev = libevdev.Device(fd)
+            print_capabilities(dev)
+            print("################################\n"
+                  "#      Waiting for META+U      #\n"
+                  "################################")
+
+            while True:
+                try:
+                    for e in dev.events():
+                        print_event(e)
+                except libevdev.EventsDroppedException:
+                    for e in dev.sync():
+                        print_event(e)
+
+    except KeyboardInterrupt:
+        pass
+    except IOError as e:
+        import errno
+        if e.errno == errno.EACCES:
+            print("Insufficient permissions to access {}".format(path))
+        elif e.errno == errno.ENOENT:
+            print("Device {} does not exist".format(path))
+        else:
+            raise e
+
+
+if __name__ == "__main__":
+    main()
 

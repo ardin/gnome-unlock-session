@@ -11,10 +11,10 @@ Source:     	{{{ git_dir_pack }}}
 
 License:	GPL
 
-Requires:       python3-evdev
+Requires:   python3-libevdev
 
 %description
-Fast gnome unlock session by pressing SUPER+U for quite safe home environments
+Fast gnome unlock session by pressing SUPER+U for safe home environments
 
 %global debug_package %{nil}
 
