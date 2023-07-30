@@ -18,7 +18,7 @@ I don't recommend this in sensitive environments or where someone can apply "Mor
 
 ## Installation
 
-**Fedora 32**
+**Fedora 37, 38**
 
 * dnf copr enable ardin/gnome-unlock-session -y
 * dnf install gnome-unlock-session -y
